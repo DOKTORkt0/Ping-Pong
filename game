@@ -1,0 +1,153 @@
+import turtle
+from random import choice, randint
+
+window = turtle.Screen()
+window.title('Ping-Pong')             # Даём заголовок
+window.setup(width=0.8, height=0.8)   # Задаём границы приложения
+window.bgcolor('black')
+window.tracer(1,5) 
+
+border = turtle.Turtle()              # Добавляем переменную границы, как черепаху
+border.speed(0)
+border.color('purple')
+border.begin_fill()                   # Начинаем закрашивать всё пространство
+border.goto(-500, 300)                # Обозначаем координаты границы
+border.goto(500, 300)
+border.goto(500, -300)
+border.goto(-500, -300)
+border.goto(-500, 300)
+border.end_fill()                     # Заканчиваем закрашивать всё пространство
+
+border.goto(0, 300)                   # Делаем разделительную линию
+border.color('white')
+border.rt(90)                         # Поворачиваем её вниз, чтобы пунктирные линии шли вниз, а не вправо
+for i in range(25):                   # Делаем разделительную линию пунктирной (24 и 25 множители высоты экрана(600))
+    if i % 2 == 0:
+        border.forward(24)
+    else:
+        border.up()
+        border.forward(24)
+        border.down()
+border.hideturtle()                   # Прячем черепаху 
+
+
+
+# Создаём левую рокетку
+rocket_l = turtle.Turtle()            # Добавляем переменную левой рокетки, как черепаху
+rocket_l.color('white')
+rocket_l.shape('square')              # Придаём рокетке форму квадрата
+rocket_l.shapesize(stretch_len=1, stretch_wid=5) # Задаём размеры нашего квадрата, чтобы он стал прямоугольником
+rocket_l.up()                         # Поднимаем 'хвост' чтобы при перемещении рокетка не оставляла линий
+rocket_l.goto(-450, 0)                # Перемещаем рокетку в левую часть поля
+
+
+def move_up_l():                      # Создаём функцию для движения рокетки вверх
+    Y = rocket_l.ycor() + 10          # Узнаём координаты по оси Oy
+    if Y > 250:                       # Создаём условие, которое не будет позволять рокетке выходить за пределы поля, учитывая точку отсчёта в центре прямоугольника
+        Y = 250
+    rocket_l.sety(Y)                  # Делаем шаг с которым рокетка будет перемещаться вверх
+
+def move_down_l():                    # Создаём функцию для движения рокетки вниз
+    Y = rocket_l.ycor() - 10          # Узнаём координаты по оси Oy
+    if Y < -250:                      # Создаём условие, которое не будет позволять рокетке выходить за пределы поля, учитывая точку отсчёта в центре прямоугольника
+        Y = -250
+    rocket_l.sety(Y)                  # Делаем шаг с которым рокетка будет перемещаться вниз
+
+
+window.onkeypress(move_up_l, 'w')     # Вызываем у окна метод onkeypress и передаём первым аргуменом название функции(любое), а вторым аргументов клавишу, на которую будет реагировать функция
+window.onkeypress(move_down_l, 's')
+
+
+
+# Создаём правую рокетку
+rocket_r = turtle.Turtle()            # Добавляем переменную левой рокетки, как черепаху
+rocket_r.color('white')
+rocket_r.shape('square')              # Придаём рокетке форму квадрата
+rocket_r.shapesize(stretch_len=1, stretch_wid=5) # Задаём размеры нашего квадрата, чтобы он стал прямоугольником
+rocket_r.up()                         # Поднимаем 'хвост' чтобы при перемещении рокетка не оставляла линий
+rocket_r.goto(450, 0)                 # Перемещаем рокетку в левую часть поля
+
+
+def move_up_r():                      # Создаём функцию для движения рокетки вверх
+    Y = rocket_r.ycor() + 10          # Узнаём координаты по оси Oy
+    if Y > 250:                       # Создаём условие, которое не будет позволять рокетке выходить за пределы поля, учитывая точку отсчёта в центре прямоугольника
+        Y = 250
+    rocket_r.sety(Y)                  # Делаем шаг с которым рокетка будет перемещаться вверх
+
+def move_down_r():                    # Создаём функцию для движения рокетки вниз
+    Y = rocket_r.ycor() - 10          # Узнаём координаты по оси Oy
+    if Y < -250:                      # Создаём условие, которое не будет позволять рокетке выходить за пределы поля, учитывая точку отсчёта в центре прямоугольника
+        Y = -250
+    rocket_r.sety(Y)                  # Делаем шаг с которым рокетка будет перемещаться вниз
+
+
+score_l = 0
+FONT = ('Arial', 44)
+s1= turtle.Turtle(visible=False)
+s1.color('white')
+s1.up()
+s1.setposition(-200, 350)
+s1.write(score_l, font=FONT)
+
+score_r = 0
+FONT = ('Arial', 44)
+s2= turtle.Turtle(visible=False)
+s2.color('white')
+s2.up()
+s2.setposition(200, 350)
+s2.write(score_r, font=FONT)
+
+
+ball = turtle.Turtle()
+ball.shape('circle')
+ball.speed(0)
+ball.dx = 5                          # Задаём скорость по оси Ox и Oy
+ball.dy = -5
+ball.up()
+
+
+window.listen()                       # Вызываем метод listen() чтобы наше окно реагировало на нажатия клавиш
+window.onkeypress(move_up_l, 'w')     # Вызываем у окна метод onkeypress и передаём первым аргуменом название функции(любое), а вторым аргументов клавишу, на которую будет реагировать функция
+window.onkeypress(move_down_l, 's')
+window.onkeypress(move_up_r, 'Up')       
+window.onkeypress(move_down_r, 'Down')
+
+
+while True:
+    window.update()
+
+    ball.setx(ball.xcor() + ball.dx)  # Обращаемся к мячу, получаем его координаты по Ox и добавляем скорость смещения мяча. И функцией setx() устанавливаем новую координату по оси Ox
+    ball.sety(ball.ycor() + ball.dy)
+
+    if ball.ycor() >= 290:            # Если наша координата по оси Oy больше, чем граница с учётом размера мячика, то он меняет своё направление на противоположное
+        ball.dy = -ball.dy
+    
+    if ball.ycor() <= -290:
+        ball.dy = -ball.dy
+    
+    if ball.xcor() >= 490:
+        score_r += 1
+        s2.clear()
+        s2.write(score_r, font=FONT)
+        ball.goto(0, randint(-150, 150))
+        ball.dx = choice([-7,-6,-5, 5,6,7])  
+        ball.dy = choice([-7,-6,-5, 5,6,7])  
+
+    if ball.xcor() <= -490:
+        score_l += 1
+        s1.clear()
+        s1.write(score_l, font=FONT)
+        ball.goto(0, randint(-150, 150))
+        ball.dx = choice([-7,-6,-5, 5,6,7]) 
+        ball.dy = choice([-7,-6,-5, 5,6,7])
+
+    if ball.ycor() >= rocket_r.ycor()-50 and ball.ycor()-5 <= rocket_r.ycor()+50 \
+        and ball.xcor() >= rocket_r.xcor()-5 and ball.xcor()-5 <= rocket_r.xcor()+5:
+        ball.dx = -ball.dx
+    
+    if ball.ycor() >= rocket_l.ycor()-50 and ball.ycor() <= rocket_l.ycor()+50 \
+        and ball.xcor() >= rocket_l.xcor()-5 and ball.xcor() <= rocket_l.xcor()+5:
+        ball.dx = -ball.dx
+
+
+window.mainloop()
